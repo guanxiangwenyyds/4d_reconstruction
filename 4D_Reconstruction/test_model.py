@@ -25,7 +25,7 @@ else:
     print("Model is on CPU")
 
 # Initialize the loss function
-loss_fn = DeformationLoss(position_weight=1.0, quaternion_weight=1.0).to(device)
+loss_fn = DeformationLoss(position_weight=0.5, quaternion_weight=0.5).to(device)
 
 # Create an optimizer
 optimizer = optim.Adam(model.parameters(), lr=0.001)
