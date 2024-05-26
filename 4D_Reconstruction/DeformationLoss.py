@@ -26,7 +26,7 @@ class DeformationLoss(nn.Module):
         position_loss = F.mse_loss(predicted_x, target_x)
 
         # use Inner Product of predicted value and true label to measure quaterion loss
-        quaternion_loss = 1 - torch.abs(torch.sum(predicted_q * target_q, dim=-1))
+        quaternion_loss = F.mse_loss(predicted_q, target_q)
 
         # combine two loss
         loss = self.position_weight * position_loss + self.quaternion_weight * quaternion_loss.mean()
