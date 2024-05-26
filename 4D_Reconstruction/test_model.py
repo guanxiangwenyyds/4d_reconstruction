@@ -3,55 +3,64 @@ import torch.optim as optim
 from transModel import DeformationNetworkSeparate
 from DeformationLoss import DeformationLoss
 
+'''
+The test involves:
+1. Initializing the model and loss function.
+2. Creating an optimizer for model training.
+3. Simulating input and target data.
+4. Performing a training loop to optimize the model parameters based on the loss.
+5. Checking if the computations are performed on the GPU or CPU.
+'''
+
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
-# 创建网络实例
+# Initialize the model
 model = DeformationNetworkSeparate().to(device)
 
-# 检查模型是否在 GPU 上
+# Check if the model is on GPU
 if next(model.parameters()).is_cuda:
     print("Model is on GPU")
 else:
     print("Model is on CPU")
 
-# 创建损失函数实例
+# Initialize the loss function
 loss_fn = DeformationLoss(position_weight=1.0, quaternion_weight=1.0).to(device)
 
-# 创建优化器
+# Create an optimizer
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# 模拟数据
+# Simulate input data
 x = torch.tensor([0.1, 0.2, 0.3], device=device)
 q = torch.tensor([0.1, 0.2, 0.3, 0.4], device=device)
 t = 1.0
 target_x = torch.tensor([0.2, 0.3, 0.4], device=device)
 target_q = torch.tensor([0.2, 0.3, 0.4, 0.5], device=device)
 
-# 检查输入数据是否在 GPU 上
+# Check if the input data is on GPU
 if x.is_cuda and q.is_cuda and target_x.is_cuda and target_q.is_cuda:
     print("Data is on GPU")
 else:
     print("Data is on CPU")
 
-# 训练循环
+# Training loop
 num_epochs = 50
 for epoch in range(num_epochs):
     model.train()
     optimizer.zero_grad()
 
-    # 前向传播
+    # Forward pass
     predicted_x, predicted_q = model(x, q, t)
 
-    # 检查预测值是否在 GPU 上
+    # Check if the predictions are on GPU
     if predicted_x.is_cuda and predicted_q.is_cuda:
         print(f"Epoch {epoch+1}: Predictions are on GPU")
     else:
         print(f"Epoch {epoch+1}: Predictions are on CPU")
 
-    # 计算损失
+    # Compute the loss
     loss = loss_fn(predicted_x, predicted_q, target_x, target_q)
 
-    # 反向传播和优化
+    # Backward pass and optimization
     loss.backward()
     optimizer.step()
 
@@ -59,3 +68,4 @@ for epoch in range(num_epochs):
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
 print("Training complete.")
+
