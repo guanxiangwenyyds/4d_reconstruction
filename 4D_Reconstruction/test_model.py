@@ -1,6 +1,6 @@
 import torch
 import torch.optim as optim 
-from transModel import DeformationNetworkSeparate
+from transModel import DeformationNetworkSeparate, DeformationNetworkConnected
 from DeformationLoss import DeformationLoss
 
 '''
