@@ -3,7 +3,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 '''
+Position loss: MSE between predicted and target positions.
+Quaternion loss: 1 minus the absolute value of the inner product between predicted
+and target quaternions.
 
+The final loss is a weighted sum of the position loss and quaternion loss.
+
+Attributes:
+    position_weight (float): Weight for the position loss component.
+    quaternion_weight (float): Weight for the quaternion loss component.
 '''
 
 class DeformationLoss(nn.Module):
