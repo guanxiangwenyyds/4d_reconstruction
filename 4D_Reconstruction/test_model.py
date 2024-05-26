@@ -15,7 +15,8 @@ The test involves:
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
 # Initialize the model
-model = DeformationNetworkSeparate().to(device)
+# model = DeformationNetworkSeparate().to(device)
+model = DeformationNetworkConnected().to(device)
 
 # Check if the model is on GPU
 if next(model.parameters()).is_cuda:
